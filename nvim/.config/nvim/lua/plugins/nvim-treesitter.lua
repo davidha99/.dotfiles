@@ -8,6 +8,7 @@ return {
         "typescript",
         "javascript",
         "css",
+        "prisma",
       })
     end,
   },
