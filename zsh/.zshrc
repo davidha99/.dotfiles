@@ -115,36 +115,31 @@ ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=#94a1b2,bold'
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-[ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"
-PATH=/Users/davidhdz/Library/Python/3.7/bin:$PATH
 
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/davidhdz/.cabal/bin:/Users/davidhdz/.ghcup/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands
-export PATH=$PATH:$(go env GOPATH)/bin
-source /Users/davidhdz/opt/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Safely add directories to PATH
+add_to_path() {
+  case ":$PATH:" in
+    *":$1:"*) ;;  # Already in PATH
+    *) export PATH="$1:$PATH" ;;
+  esac
+}
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+add_to_path "$HOME/go/bin"
+add_to_path "$HOME/.local/bin/scripts"
 
-export PATH=$PATH:$HOME/.ghcup/hls/1.8.0.0/bin
-export PATH=$PATH:$HOME/.cargo/bin
-export PATH=$PATH:$HOME/.local/bin/scripts
-export PATH=$PATH:$HOME/Documents/nand2tetris/tools
-eval "$(rbenv init - zsh)"
-
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/davidhdz/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/davidhdz/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/davidhdz/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/davidhdz/anaconda3/bin:$PATH"
-    fi
+# Guard against executing nvm again and adding the same path in $PATH
+if [[ -z "$NVM_LOADED" ]]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  export NVM_LOADED=true
 fi
-unset __conda_setup
-# <<< conda initialize <<<
+
+# Guard against executing rbenv again and adding the same path in $PATH
+if [[ ":$PATH:" != *"$HOME/.rbenv/shims"* ]]; then
+  eval "$(rbenv init - zsh)"
+fi
+
+source /Users/davidhdz/opt/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
