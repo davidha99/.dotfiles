@@ -84,7 +84,7 @@ source $ZSH/oh-my-zsh.sh
 # Syntax Highlighting Plugin
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 typeset -A ZSH_HIGHLIGHT_STYLES
-# Changing command colors 
+# Changing command colors
 ZSH_HIGHLIGHT_STYLES[command]='fg=#f9bc60,bold'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=#f9bc60,bold'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=#f9bc60,bold'
@@ -124,8 +124,7 @@ add_to_path() {
   esac
 }
 
-add_to_path "$HOME/go/bin"
-add_to_path "$HOME/.local/bin/scripts"
+# add_to_path "$HOME/.local/bin/scripts"
 
 # Guard against executing nvm again and adding the same path in $PATH
 if [[ -z "$NVM_LOADED" ]]; then
@@ -140,6 +139,5 @@ if [[ ":$PATH:" != *"$HOME/.rbenv/shims"* ]]; then
   eval "$(rbenv init - zsh)"
 fi
 
-source /Users/davidhdz/opt/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
